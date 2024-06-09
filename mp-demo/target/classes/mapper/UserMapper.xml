@@ -6,6 +6,11 @@
         VALUES
         (#{id}, #{username}, #{password}, #{phone}, #{info}, #{balance});
     </insert>
+
+    <update id="updateBalanceByIds">
+        update user set balance = balance - #{balance} ${ew.customSqlSegment}
+    </update>
+
     <update id="updateUser" parameterType="com.itheima.mp.domain.po.User">
         UPDATE `user`
         <set>
@@ -30,6 +35,7 @@
         </set>
         WHERE `id`=#{id};
     </update>
+
     <delete id="deleteUser" parameterType="com.itheima.mp.domain.po.User">
         DELETE FROM user WHERE id = #{id}
     </delete>

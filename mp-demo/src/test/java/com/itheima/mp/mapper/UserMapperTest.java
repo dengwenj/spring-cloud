@@ -101,4 +101,10 @@ class UserMapperTest {
             .in("id", List.of(1L, 2L, 3L, 4L));
         userMapper.update(null, wrapper);
     }
+
+    @Test
+    void testUpdateBalanceByIds() {
+        Wrapper<User> wrapper = new QueryWrapper<User>().in("id", List.of(1L, 2L, 3L, 4L));
+        userMapper.updateBalanceByIds(wrapper, 200);
+    }
 }

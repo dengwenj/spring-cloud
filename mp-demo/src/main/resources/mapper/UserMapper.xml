@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.itheima.mp.mapper.UserMapper">
     <insert id="saveUser" parameterType="com.itheima.mp.domain.po.User">
         INSERT INTO `user` (`id`, `username`, `password`, `phone`, `info`, `balance`)
         VALUES
         (#{id}, #{username}, #{password}, #{phone}, #{info}, #{balance});
     </insert>
+
+    <update id="updateBalanceByIds">
+        update user set balance = balance - #{balance} ${ew.customSqlSegment}
+    </update>
+
     <update id="updateUser" parameterType="com.itheima.mp.domain.po.User">
         UPDATE `user`
         <set>
@@ -30,6 +38,7 @@
         </set>
         WHERE `id`=#{id};
     </update>
+
     <delete id="deleteUser" parameterType="com.itheima.mp.domain.po.User">
         DELETE FROM user WHERE id = #{id}
     </delete>

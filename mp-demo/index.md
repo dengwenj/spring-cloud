@@ -97,3 +97,21 @@ void testUpdateByUpdateWrapper() {
     userMapper.update(null, wrapper);
 }
 ```
+
+### 自定义 SQL
+* 可以利用 MybatisPlus 的 Wrapper 来构建复杂的 Where 条件，然后自己定义 SQL 语句中剩下的部分
+```java
+@Test
+void testUpdateBalanceByIds() {
+    Wrapper<User> wrapper = new QueryWrapper<User>().in("id", List.of(1L, 2L, 3L, 4L));
+    userMapper.updateBalanceByIds(wrapper, 200);
+}
+
+public interface UserMapper extends BaseMapper<User> {
+    void updateBalanceByIds(@Param(Constants.WRAPPER) Wrapper<User> wrapper, Integer balance);
+}
+
+//<update id="updateBalanceByIds">
+//  update user set balance = balance - #{balance} ${ew.customSqlSegment}
+//</update>
+```
