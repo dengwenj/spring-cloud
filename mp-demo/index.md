@@ -45,3 +45,9 @@ public class User {
     private String address;
 }
 ```
+
+## MybatisPlus 使用的基本流程是什么？
+* 1、引入起步依赖
+* 2、自定义 Mapper 基础 BaseMapper
+* 3、在实体类上添加注解声明表信息
+* 4、在 application.yml 中根据需要添加配置

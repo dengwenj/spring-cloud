@@ -34,7 +34,7 @@
         DELETE FROM user WHERE id = #{id}
     </delete>
 
-    <select id="queryUserById" resultType="com.itheima.mp.domain.po.User">
+    <select id="queryUserById" resultType="User">
         SELECT *
         FROM user
         WHERE id = #{id}

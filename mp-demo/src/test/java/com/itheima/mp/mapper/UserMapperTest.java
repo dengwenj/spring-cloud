@@ -34,6 +34,12 @@ class UserMapperTest {
         System.out.println("user = " + user);
     }
 
+    @Test
+    void testSelectById2() {
+        User user = userMapper.queryUserById(4L);
+        System.out.println("user = " + user);
+    }
+
 
     @Test
     void testQueryByIds() {
