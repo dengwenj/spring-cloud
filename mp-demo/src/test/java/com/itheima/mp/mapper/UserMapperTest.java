@@ -1,5 +1,9 @@
 package com.itheima.mp.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.itheima.mp.domain.po.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +62,43 @@ class UserMapperTest {
     @Test
     void testDeleteUser() {
         userMapper.deleteById(5L);
+    }
+
+    @Test
+    void testSelectByQueryWrapper() {
+        // 条件构建器
+        Wrapper<User> wrapper = new QueryWrapper<User>()
+            .select("id", "username", "info", "balance")
+            .like("username", "o")
+            .ge("balance", 2000);
+        List<User> users = userMapper.selectList(wrapper);
+        System.out.println("users" + users);
+    }
+
+    @Test
+    void testSelectByLambdaQueryWrapper() {
+        // 条件构建器
+        Wrapper<User> wrapper = new LambdaQueryWrapper<User>()
+            .select(User::getId, User::getUsername, User::getInfo, User::getBalance)
+            .like(User::getUsername, "o")
+            .ge(User::getBalance, 2000);
+        List<User> users = userMapper.selectList(wrapper);
+        System.out.println("users" + users);
+    }
+
+    @Test
+    void testUpdateByQueryWrapper() {
+        User user = new User();
+        user.setBalance(2000);
+        Wrapper<User> wrapper = new QueryWrapper<User>().eq("username", "jack");
+        userMapper.update(user, wrapper);
+    }
+
+    @Test
+    void testUpdateByUpdateWrapper() {
+        Wrapper<User> wrapper = new UpdateWrapper<User>()
+            .setSql("balance = balance - 200")
+            .in("id", List.of(1L, 2L, 3L, 4L));
+        userMapper.update(null, wrapper);
     }
 }

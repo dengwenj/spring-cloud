@@ -51,3 +51,49 @@ public class User {
 * 2、自定义 Mapper 基础 BaseMapper
 * 3、在实体类上添加注解声明表信息
 * 4、在 application.yml 中根据需要添加配置
+
+## 条件构造器
+* MybatisPlus 支持各种复杂的 where 条件
+* Wrapper、AbstractWrapper、UpdateWrapper、QueryWrapper、AbstractLambdaWrapper、LambdaUpdateWrapper、LambdaQueryWrapper
+* QueryWrapper 和 LambdaQueryWrapper 通常用来构建 select、delete、update 的 where 条件部分
+* UpdateWrapper 和 LambdaUpdateWrapper 通常只有在 set 语句比较特殊才使用
+* 尽量使用 LambdaQueryWrapper 和 LambdaUpdateWrapper，避免硬编码
+```java
+@Test
+void testSelectByQueryWrapper() {
+    // 条件构建器
+    Wrapper<User> wrapper = new QueryWrapper<User>()
+        .select("id", "username", "info", "balance")
+        .like("username", "o")
+        .ge("balance", 2000);
+    List<User> users = userMapper.selectList(wrapper);
+    System.out.println("users" + users);
+}
+
+@Test
+void testSelectByLambdaQueryWrapper() {
+    // 条件构建器
+    Wrapper<User> wrapper = new LambdaQueryWrapper<User>()
+        .select(User::getId, User::getUsername, User::getInfo, User::getBalance)
+        .like(User::getUsername, "o")
+        .ge(User::getBalance, 2000);
+    List<User> users = userMapper.selectList(wrapper);
+    System.out.println("users" + users);
+}
+
+@Test
+void testUpdateByQueryWrapper() {
+    User user = new User();
+    user.setBalance(2000);
+    Wrapper<User> wrapper = new QueryWrapper<User>().eq("username", "jack");
+    userMapper.update(user, wrapper);
+}
+
+@Test
+void testUpdateByUpdateWrapper() {
+    Wrapper<User> wrapper = new UpdateWrapper<User>()
+        .setSql("balance = balance - 200")
+        .in("id", List.of(1L, 2L, 3L, 4L));
+    userMapper.update(null, wrapper);
+}
+```
