@@ -115,3 +115,8 @@ public interface UserMapper extends BaseMapper<User> {
 //  update user set balance = balance - #{balance} ${ew.customSqlSegment}
 //</update>
 ```
+### Service 接口
+* MP 的 Service 接口使用流程是怎样的？
+* 1、自定义 Service 接口继承 IService 接口：public interface IUserService extends IService<User> {}
+* 2、自定义 Service 实现类，实现自定义接口并继承 ServiceImpl 类：
+* public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {}

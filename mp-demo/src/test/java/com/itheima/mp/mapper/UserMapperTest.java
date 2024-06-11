@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.itheima.mp.domain.po.User;
+import com.itheima.mp.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +18,9 @@ class UserMapperTest {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserService userService;
 
     @Test
     void testInsert() {
@@ -106,5 +110,26 @@ class UserMapperTest {
     void testUpdateBalanceByIds() {
         Wrapper<User> wrapper = new QueryWrapper<User>().in("id", List.of(1L, 2L, 3L, 4L));
         userMapper.updateBalanceByIds(wrapper, 200);
+    }
+
+    @Test
+    void testInsert1() {
+        User user = new User();
+        user.setId(5L);
+        user.setUsername("Lucy");
+        user.setPassword("123");
+        user.setPhone("18688990011");
+        user.setBalance(200);
+        user.setInfo("{\"age\": 24, \"intro\": \"英文老师\", \"gender\": \"female\"}");
+        user.setCreateTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
+
+        userService.save(user);
+    }
+
+    @Test
+    void testGetList() {
+        List<User> users = userService.listByIds(List.of(1L, 2L, 3L, 4L));
+        users.forEach(System.out::println);
     }
 }
