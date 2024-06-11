@@ -12,11 +12,6 @@ import java.util.List;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Override
-    public boolean save(User entity) {
-        return super.save(entity);
-    }
-
-    @Override
     public void deductBalance(Long id, Integer money) {
         // 查询用户
         User user = this.getById(id);

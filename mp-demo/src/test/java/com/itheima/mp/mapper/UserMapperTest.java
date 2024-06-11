@@ -132,4 +132,10 @@ class UserMapperTest {
         List<User> users = userService.listByIds(List.of(1L, 2L, 3L, 4L));
         users.forEach(System.out::println);
     }
+
+    @Test
+    void testInsertBatch() {
+        // 批量新增
+        //userService.saveBatch();
+    }
 }

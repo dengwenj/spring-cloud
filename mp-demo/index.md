@@ -124,3 +124,48 @@ public interface UserMapper extends BaseMapper<User> {
 
 ### service 接口实现的 LambdaQuery 和 LambdaUpdate
 * LambdaQuery 主要用来做复杂查询的，LambdaUpdate 主要用来复杂更新
+```java
+@Override
+public void deductBalance(Long id, Integer money) {
+    // 查询用户
+    User user = this.getById(id);
+    // 检验用户状态
+    if (user == null && user.getStatus() == 2) {
+        throw new RuntimeException("出错");
+    }
+    // 检验余额是否充足
+    if (user.getBalance() < money) {
+        throw new RuntimeException("用户余额不足");
+    }
+    // 扣减余额
+    // this.baseMapper.deductBalance(id, money);
+    int i = user.getBalance() - money;
+    this.lambdaUpdate()
+        .set(User::getBalance, i)
+        .set(i == 0, User::getStatus, 2)
+        .eq(User::getId, id)
+        .eq(User::getBalance, user.getBalance()) // 乐观锁
+        .update();
+}
+
+@Override
+public List<User> getList(UserQuery userQuery) {
+    String name = userQuery.getName();
+    Integer status = userQuery.getStatus();
+    Integer minBalance = userQuery.getMinBalance();
+    Integer maxBalance = userQuery.getMaxBalance();
+
+    return this.lambdaQuery()
+        .like(name != null, User::getUsername, name)
+        .eq(status != null, User::getStatus, status)
+        .ge(minBalance != null, User::getBalance, minBalance)
+        .le(maxBalance != null, User::getBalance, maxBalance)
+        .list();
+}
+```
+
+### IService 批量新增
+* 批量处理方案：
+* 1、普通 for 循环逐条插入速度极差，不推荐
+* 2、MP 的批量新增，基于预编译的批处理，性能一般
+* 3、配置 jdbc 参数，开 rewriteBatchedStatements，性能最好
