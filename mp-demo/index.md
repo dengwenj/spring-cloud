@@ -120,3 +120,4 @@ public interface UserMapper extends BaseMapper<User> {
 * 1、自定义 Service 接口继承 IService 接口：public interface IUserService extends IService<User> {}
 * 2、自定义 Service 实现类，实现自定义接口并继承 ServiceImpl 类：
 * public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {}
+* 基础的增删改查可以直接掉 Service 中实现的方法，有业务逻辑的自定义方法，Mapper 也是一样，复杂的可以自定义 sql
