@@ -164,8 +164,31 @@ public List<User> getList(UserQuery userQuery) {
 }
 ```
 
-### IService 批量新增
+### IService 批量新增，用的 jdbc 的批处理
 * 批量处理方案：
 * 1、普通 for 循环逐条插入速度极差，不推荐
 * 2、MP 的批量新增，基于预编译的批处理，性能一般
 * 3、配置 jdbc 参数，开 rewriteBatchedStatements，性能最好
+
+### MP 扩展功能
+* service 出现相互调用，可以使用 Db 静态工具去调用
+```java
+@Override
+public UserVO queryUserAndAddressById(Long id) {
+    User user = this.getById(id);
+    if (user == null) {
+        throw new RuntimeException("报错了");
+    }
+
+    UserVO userVO = BeanUtil.copyProperties(user, UserVO.class);
+
+    // Db 静态工具
+    List<Address> addresses = Db.lambdaQuery(Address.class).eq(Address::getUserId, id).list();
+
+    if (addresses != null && !addresses.isEmpty()) {
+        List<AddressVO> addressVOS = BeanUtil.copyToList(addresses, AddressVO.class);
+        userVO.setAddresses(addressVOS);
+    }
+    return userVO;
+}
+```

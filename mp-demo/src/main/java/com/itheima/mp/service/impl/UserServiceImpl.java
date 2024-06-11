@@ -1,8 +1,13 @@
 package com.itheima.mp.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.toolkit.Db;
+import com.itheima.mp.domain.po.Address;
 import com.itheima.mp.domain.po.User;
 import com.itheima.mp.domain.query.UserQuery;
+import com.itheima.mp.domain.vo.AddressVO;
+import com.itheima.mp.domain.vo.UserVO;
 import com.itheima.mp.mapper.UserMapper;
 import com.itheima.mp.service.UserService;
 import org.springframework.stereotype.Service;
@@ -47,5 +52,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             .ge(minBalance != null, User::getBalance, minBalance)
             .le(maxBalance != null, User::getBalance, maxBalance)
             .list();
+    }
+
+    @Override
+    public UserVO queryUserAndAddressById(Long id) {
+        User user = this.getById(id);
+        if (user == null) {
+            throw new RuntimeException("报错了");
+        }
+
+        UserVO userVO = BeanUtil.copyProperties(user, UserVO.class);
+
+        // Db 静态工具
+        List<Address> addresses = Db.lambdaQuery(Address.class).eq(Address::getUserId, id).list();
+
+        if (addresses != null && !addresses.isEmpty()) {
+            List<AddressVO> addressVOS = BeanUtil.copyToList(addresses, AddressVO.class);
+            userVO.setAddresses(addressVOS);
+        }
+        return userVO;
     }
 }
