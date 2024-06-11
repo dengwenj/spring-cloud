@@ -192,3 +192,24 @@ public UserVO queryUserAndAddressById(Long id) {
     return userVO;
 }
 ```
+
+## 逻辑删除
+* 逻辑删除就是基于代码逻辑模拟删除效果，但并不会真正删除数据，思路如下：
+* 1、在表中添加一个字段标记数据是否被删除
+* 2、当删除数据时把标记置为1
+* 3、查询时只查询标记为 0 的数据
+* MybatisPlus 提供了逻辑删除功能，无需改变方法调用的方式，而是在底层帮我们自动修改 CRUD 的语句，只需要在 application.yml 中配置
+```yaml
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: deleted # 全局逻辑删除的实体字段名(since 3.3.0,配置后可以忽略不配置步骤2)
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+```
+
+### 注意
+* 逻辑删除本身也有自己的问题，比如：
+* 1、会导致数据库表垃圾数据越来越多，影响查询效率
+* 2、SQL 中全都需要对逻辑删除字段做判断，影响查询效率
+* 因此，不太推荐采用逻辑删除功能，如果数据不能删除，可以采用把数据迁移到其它表的办法

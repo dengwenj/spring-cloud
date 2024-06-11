@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.toolkit.Db;
+import com.itheima.mp.domain.po.Address;
 import com.itheima.mp.domain.po.User;
 import com.itheima.mp.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -137,5 +139,10 @@ class UserMapperTest {
     void testInsertBatch() {
         // 批量新增
         //userService.saveBatch();
+    }
+
+    @Test
+    void testDeleteLogic() {
+        Db.removeById(59L, Address.class);
     }
 }
