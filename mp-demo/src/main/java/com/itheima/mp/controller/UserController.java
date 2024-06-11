@@ -3,6 +3,7 @@ package com.itheima.mp.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.itheima.mp.domain.dto.UserFormDTO;
 import com.itheima.mp.domain.po.User;
+import com.itheima.mp.domain.query.UserQuery;
 import com.itheima.mp.domain.vo.UserVO;
 import com.itheima.mp.service.UserService;
 import io.swagger.annotations.Api;
@@ -15,14 +16,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-@Api(tags = "user")
+@Api(tags = "用户接口")
 public class UserController {
     @Autowired
     private UserService userService;
 
     @PostMapping
     @ApiOperation("新增用户")
-    public void save(UserFormDTO userFormDTO) {
+    public void save(@RequestBody UserFormDTO userFormDTO) {
         User user = BeanUtil.copyProperties(userFormDTO, User.class);
         userService.save(user);
     }
@@ -51,5 +52,11 @@ public class UserController {
     @ApiOperation("根据 id 扣减余额")
     public void deductBalance(@PathVariable Long id, @PathVariable Integer money) {
         userService.deductBalance(id, money);
+    }
+
+    @GetMapping("/list")
+    @ApiOperation("条件查询")
+    public List<User> getList(UserQuery userQuery) {
+        return userService.getList(userQuery);
     }
 }
