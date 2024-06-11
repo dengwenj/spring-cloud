@@ -1,7 +1,6 @@
 package com.itheima.mp.domain.dto;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.itheima.mp.domain.po.UserInfo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,7 +22,7 @@ public class UserFormDTO {
     private String phone;
 
     @ApiModelProperty("详细信息，JSON风格")
-    private String info;
+    private UserInfo info;
 
     @ApiModelProperty("账户余额")
     private Integer balance;

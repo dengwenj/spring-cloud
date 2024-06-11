@@ -232,12 +232,36 @@ public enum UserStatus {
 
     @EnumValue
     private final int value;
-    @JsonValue
+    @JsonValue // 返回给前端的值
     private final String desc;
 
     UserStatus(int value, String desc) {
         this.value = value;
         this.desc = desc;
     }
+}
+```
+
+## JSON 处理器
+* 1、给 json 类型对应的 java 当中实体类字段定义注解 @TableField(typeHandler = JacksonTypeHandler.class)
+* 2、给 @TableName 上加上 @TableName(value = "user", autoResultMap = true)
+```java
+package com.itheima.mp.domain.po;
+
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
+@TableName(value = "user", autoResultMap = true)
+public class  User {
+    /**
+     * 详细信息
+     */
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private UserInfo info;
 }
 ```
