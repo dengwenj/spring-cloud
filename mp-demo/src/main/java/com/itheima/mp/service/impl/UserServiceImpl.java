@@ -8,6 +8,7 @@ import com.itheima.mp.domain.po.User;
 import com.itheima.mp.domain.query.UserQuery;
 import com.itheima.mp.domain.vo.AddressVO;
 import com.itheima.mp.domain.vo.UserVO;
+import com.itheima.mp.enums.UserStatus;
 import com.itheima.mp.mapper.UserMapper;
 import com.itheima.mp.service.UserService;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 查询用户
         User user = this.getById(id);
         // 检验用户状态
-        if (user == null && user.getStatus() == 2) {
+        if (user == null && user.getStatus() == UserStatus.FREEZE) {
             throw new RuntimeException("出错");
         }
         // 检验余额是否充足
@@ -38,7 +39,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         int i = user.getBalance() - money;
         this.lambdaUpdate()
             .set(User::getBalance, i)
-            .set(i == 0, User::getStatus, 2)
+            .set(i == 0, User::getStatus, UserStatus.FREEZE)
             .eq(User::getId, id)
             .eq(User::getBalance, user.getBalance()) // 乐观锁
             .update();

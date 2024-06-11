@@ -213,3 +213,31 @@ mybatis-plus:
 * 1、会导致数据库表垃圾数据越来越多，影响查询效率
 * 2、SQL 中全都需要对逻辑删除字段做判断，影响查询效率
 * 因此，不太推荐采用逻辑删除功能，如果数据不能删除，可以采用把数据迁移到其它表的办法
+
+### 枚举处理器
+* 如何实现 PO 类中的枚举类型变量与数据库字段的转换？
+* 1、给枚举中的与数据库对应 value 值添加 @EnumValue 注解
+* 2、在配置文件中配置统一的枚举处理器，实现类型转换
+```java
+package com.itheima.mp.enums;
+
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Getter;
+
+@Getter
+public enum UserStatus {
+    NORMAL(1, "正常"),
+    FREEZE(2, "冻结");
+
+    @EnumValue
+    private final int value;
+    @JsonValue
+    private final String desc;
+
+    UserStatus(int value, String desc) {
+        this.value = value;
+        this.desc = desc;
+    }
+}
+```
