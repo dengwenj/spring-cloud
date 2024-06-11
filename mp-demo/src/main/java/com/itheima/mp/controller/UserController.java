@@ -44,9 +44,11 @@ public class UserController {
 
     @GetMapping
     @ApiOperation("根据 id 批量查询")
-    public List<UserVO> getUserByIds(List<Long> ids) {
-        List<User> users = userService.listByIds(ids);
-        return BeanUtil.copyToList(users, UserVO.class);
+    public List<UserVO> getUserByIds(@RequestParam List<Long> ids) {
+        System.out.println(ids);
+        //List<User> users = userService.listByIds(ids);
+        //return BeanUtil.copyToList(users, UserVO.class);
+        return userService.queryUserAndAddressByIds(ids);
     }
 
     @PutMapping("/{id}/deduction/{money}")

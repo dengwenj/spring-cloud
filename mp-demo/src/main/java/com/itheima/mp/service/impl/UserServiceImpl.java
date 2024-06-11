@@ -12,7 +12,12 @@ import com.itheima.mp.mapper.UserMapper;
 import com.itheima.mp.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
@@ -71,5 +76,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             userVO.setAddresses(addressVOS);
         }
         return userVO;
+    }
+
+    @Override
+    public List<UserVO> queryUserAndAddressByIds(List<Long> ids) {
+        List<User> users = this.listByIds(ids);
+        if (users == null || users.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // 获取 userid
+        List<Long> userIdList = users.stream().map(User::getId).toList();
+
+        // 获取这些用户id 的所有地址
+        List<Address> addresses = Db.lambdaQuery(Address.class).in(Address::getUserId, userIdList).list();
+        List<AddressVO> addressVOS = BeanUtil.copyToList(addresses, AddressVO.class);
+
+        // 根据用户 id 分组
+        Map<Long, List<AddressVO>> userIdGroup = new HashMap<>();
+        if (addresses != null && !addresses.isEmpty()) {
+             userIdGroup = addressVOS.stream().collect(Collectors.groupingBy(AddressVO::getUserId));
+        }
+
+        List<UserVO> userVOS = BeanUtil.copyToList(users, UserVO.class);
+
+        for (UserVO userVO : userVOS) {
+            userVO.setAddresses(userIdGroup.get(userVO.getId()));
+        }
+        return userVOS;
     }
 }
