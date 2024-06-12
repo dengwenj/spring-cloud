@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.itheima.mp.domain.po.Address;
 import com.itheima.mp.domain.po.User;
@@ -146,5 +148,20 @@ class UserMapperTest {
     @Test
     void testDeleteLogic() {
         Db.removeById(59L, Address.class);
+    }
+
+    @Test
+    void testPage() {
+        int pageNo = 1, pageSize = 2;
+        Page<User> page = Page.of(pageNo, pageSize);
+        // 排序。先排序了，然后再做返回数据的
+        page.addOrder(new OrderItem("balance", true));
+        page.addOrder(new OrderItem("id", true));
+
+        Page<User> page1 = userService.page(page);
+
+        System.out.println("page1.getTotal() = " + page1.getTotal());
+        System.out.println("page1.getPages() = " + page1.getPages());
+        page1.getRecords().forEach(System.out::println);
     }
 }
