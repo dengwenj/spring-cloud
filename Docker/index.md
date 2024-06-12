@@ -43,3 +43,19 @@ docker run -d --name mysql -p 3306:3306 -e TZ=Asia/Shanghai -e MYSQL_ROOT_PASSWO
 * docker rm 容器名：删除容器
 * docker rm 容器名 -f：强制删除容器
 * docker exec -it 容器名 bash：进入容器内部，使用命令行和容器交互
+
+### 数据卷
+* 数据卷（volume）是一个虚拟目录，它将宿主机目录映射到容器内目录，方便我们操作容器内文件，或者方便迁移容器产生的数据。是容器内目录与宿主机目录之间映射的桥梁
+* 卷已创建宿主机目录会自动创建
+
+### 如何挂载数据卷？
+* 在执行 docker run 命令时，使用 -v 数据卷:容器内目录，可以完成数据卷挂载
+* docker run -d --name nginx -p 80:80 -v html:/usr/share/nginx/html  nginx
+* 当创建容器时，如果挂载了数据卷且数据卷不存在，会自动创建数据卷
+
+### 数据卷命令
+* docker volume create：创建数据卷
+* docker volume ls：查看所有数据卷
+* docker volume rm：删除指定数据卷
+* docker volume inspect：查看某个数据卷的详情
+* docker volume prune：清除数据卷
