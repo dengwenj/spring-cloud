@@ -1,8 +1,11 @@
 package com.itheima.mp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
+import com.itheima.mp.domain.dto.PageDTO;
 import com.itheima.mp.domain.po.Address;
 import com.itheima.mp.domain.po.User;
 import com.itheima.mp.domain.query.UserQuery;
@@ -13,7 +16,6 @@ import com.itheima.mp.mapper.UserMapper;
 import com.itheima.mp.service.UserService;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -105,5 +107,50 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             userVO.setAddresses(userIdGroup.get(userVO.getId()));
         }
         return userVOS;
+    }
+
+    /**
+     * 分页查询
+     */
+    @Override
+    public PageDTO<UserVO> getPageList(UserQuery userQuery) {
+        String name = userQuery.getName();
+        Integer status = userQuery.getStatus();
+
+        // 1、构建 page
+        Page<User> userPage = Page.of(userQuery.getPageNo(), userQuery.getPageSize());
+
+        // 排序条件
+        if (userQuery.getSortBy() == null) {
+            // 按时间排序
+            userPage.addOrder(new OrderItem("update_time", false));
+        } else {
+            // 按条件排序
+            userPage.addOrder(new OrderItem(userQuery.getSortBy(), true));
+        }
+
+        // 查询条件
+        Page<User> page = this.lambdaQuery()
+            .like(name != null, User::getUsername, name)
+            .eq(status != null, User::getStatus, status)
+            .page(userPage);
+
+        // 总条数
+        long total = page.getTotal();
+        // 总页数
+        long pages = page.getPages();
+        // 当前页数据
+        List<User> records = page.getRecords();
+
+        PageDTO<UserVO> pageDTO = new PageDTO<>();
+        pageDTO.setTotal(total);
+        pageDTO.setPages(pages);
+        if (records == null) {
+            pageDTO.setList(Collections.emptyList());
+            return pageDTO;
+        }
+        pageDTO.setList(BeanUtil.copyToList(records, UserVO.class));
+
+        return pageDTO;
     }
 }
