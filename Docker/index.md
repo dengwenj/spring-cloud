@@ -103,3 +103,14 @@ ENTRYPOINT ["java", "-jar", "/app.jar"]
 
 ### 构建镜像的命令是什么？
 * docker build -t 镜像名 Dockerfile目录
+
+### 网络
+* 加入自定义网络的容器才可以通过容器名相互访问，Docker 的网络操作命令如下：
+* docker network create 网络名：创建一个网络
+* docker network ls：查看所有网络
+* docker network rm 网络名：删除指定网络
+* docker network prune 网络名：清除未使用的网络
+* docker network connect 网络名 容器名：使指定容器连接加入某网络
+* docker network disconnect 网络名 容器名：使指定容器连接离开某网络
+* docker network inspect 网络名：查看网络详情信息
+* 可以用 容器名去访问，一但两个容器加入了同一个网络他们可以用容器名互相访问，前提是自定义网络
