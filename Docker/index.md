@@ -48,7 +48,7 @@ docker run -d --name mysql -p 3306:3306 -e TZ=Asia/Shanghai -e MYSQL_ROOT_PASSWO
 * 数据卷（volume）是一个虚拟目录，它将宿主机目录映射到容器内目录，方便我们操作容器内文件，或者方便迁移容器产生的数据。是容器内目录与宿主机目录之间映射的桥梁
 * 卷已创建宿主机目录会自动创建
 
-### 如何挂载数据卷？
+### 如何挂载数据卷？(数据卷挂载 )
 * 在执行 docker run 命令时，使用 -v 数据卷:容器内目录，可以完成数据卷挂载
 * docker run -d --name nginx -p 80:80 -v html:/usr/share/nginx/html  nginx
 * 当创建容器时，如果挂载了数据卷且数据卷不存在，会自动创建数据卷
@@ -67,3 +67,22 @@ docker run -d --name mysql -p 3306:3306 -e TZ=Asia/Shanghai -e MYSQL_ROOT_PASSWO
 * 本地目录必须以 "/" 或 "./" 开头，如果直接以名称开头，会被识别数据卷而非本地目录
 * -v mysql:/var/lib/mysql 会被识别为一个数据卷叫 mysql
 * -v ./mysql:/var/lib/mysql 会被识别为当前目录下的 mysql 目录
+
+### 自定义镜像
+* 镜像就是包含了应用程序、程序运行的系统函数库、运行配置等文件的文件包。构建镜像的过程其实就是把上述文件打包的过程
+
+### 镜像结构
+* 入口（Entrypoint） ：镜像运行入口，一般是程序启动的脚本和参数
+* 层（Layer）：添加安装包、依赖、配置等，每次操作都形成新的一层
+* 基础镜像（BaseImage）：应用依赖的系统函数库、环境、配置、文件等
+
+### dockerfile
+* 告诉 docker 镜像结构
+* Dockerfile 就是一个文本文件，其中包含一个个的指令（Instruction），用指令来说明要执行什么操作来构建镜像。将来 Docker 可以根据 Dockerfile 帮我们构镜像
+* 指令               说明                     示例
+* FROM            指定基础镜像              FROM centos:6
+* ENV         设置环境变量，可在后面指令使用   ENV key value
+* COPY        拷贝本地文件到镜像的指定目录     COPY ./jre11.tar.gz /tmp
+* RUN         执行Linux的shell命令，一般是安装过程的命令   
+* EXPOSE      指定容器运行时监听的端口，是给镜像使用者看的
+* ENTRYPOINT  镜像中应用的启动命令，容器运行时调用
