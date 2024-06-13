@@ -114,3 +114,57 @@ ENTRYPOINT ["java", "-jar", "/app.jar"]
 * docker network disconnect 网络名 容器名：使指定容器连接离开某网络
 * docker network inspect 网络名：查看网络详情信息
 * 可以用 容器名去访问，一但两个容器加入了同一个网络他们可以用容器名互相访问，前提是自定义网络
+
+### DockerCompose
+* Docker Compose 通过一个单独的 docker-compose.yml 模版文件（yaml格式）来定义一组相关联的应用容器，帮助我们实现多个相互关联的 Docker 容器的快速部署
+* docker compose 的命令格式如下：
+* docker compose 【options】【command】
+* Options：-f指定 compose 文件的路径和名称，-p创建并启动所有service容器
+* Commands：up创建并启动所有service容器，down停止并移除所有容器、网络
+* ps，logs，stop，start，restart，top，exec
+```yaml
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql
+    container_name: mysql
+    ports:
+      - "3307:3306"
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: 123
+    volumes:
+      - "/Users/dengwenjie/dockermountdata/conf:/etc/mysql/conf.d"
+      - "/Users/dengwenjie/dockermountdata/data:/var/lib/mysql"
+      - "/Users/dengwenjie/dockermountdata/init:/docker-entrypoint-initdb.d"
+    networks:
+      - hm-net
+  hmall:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: hmall
+    ports:
+      - "8080:8080"
+    networks:
+      - hm-net
+    depends_on:
+      - mysql
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - "18080:18080"
+      - "18081:18081"
+    volumes:
+      - "/Users/dengwenjie/Desktop/nginx/nginx.conf:/etc/nginx/nginx.conf"
+      - "/Users/dengwenjie/Desktop/nginx/html:/usr/share/nginx/html"
+    depends_on:
+      - hmall
+    networks:
+      - hm-net
+networks:
+  hm-net:
+    name: hmall
+```
