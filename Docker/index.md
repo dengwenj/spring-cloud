@@ -52,6 +52,7 @@ docker run -d --name mysql -p 3306:3306 -e TZ=Asia/Shanghai -e MYSQL_ROOT_PASSWO
 * 在执行 docker run 命令时，使用 -v 数据卷:容器内目录，可以完成数据卷挂载
 * docker run -d --name nginx -p 80:80 -v html:/usr/share/nginx/html  nginx
 * 当创建容器时，如果挂载了数据卷且数据卷不存在，会自动创建数据卷
+* 宿主机目录：/var/lib/docker/volumes/html/_data
 
 ### 数据卷命令
 * docker volume create：创建数据卷
@@ -59,3 +60,10 @@ docker run -d --name mysql -p 3306:3306 -e TZ=Asia/Shanghai -e MYSQL_ROOT_PASSWO
 * docker volume rm：删除指定数据卷
 * docker volume inspect：查看某个数据卷的详情
 * docker volume prune：清除数据卷
+  
+### 本地目录挂载
+* docker run -d --name mysql -p 3307:3306 -e TZ=Asia/Shanghai -e MYSQL_ROOT_PASSWORD=123 -v /Users/dengwenjie/Desktop/data:/var/lib/mysql -v /Users/dengwenjie/Desktop/init:/docker-entrypoint-initdb.d -v /Users/dengwenjie/Desktop/conf:/ect/mysql/conf.d mysql
+* 在执行 docker run 命令时，使用 -v 本地目录:容器内目录 可以完成本地目录挂载
+* 本地目录必须以 "/" 或 "./" 开头，如果直接以名称开头，会被识别数据卷而非本地目录
+* -v mysql:/var/lib/mysql 会被识别为一个数据卷叫 mysql
+* -v ./mysql:/var/lib/mysql 会被识别为当前目录下的 mysql 目录
