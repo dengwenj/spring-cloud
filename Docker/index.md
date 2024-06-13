@@ -86,3 +86,20 @@ docker run -d --name mysql -p 3306:3306 -e TZ=Asia/Shanghai -e MYSQL_ROOT_PASSWO
 * RUN         执行Linux的shell命令，一般是安装过程的命令   
 * EXPOSE      指定容器运行时监听的端口，是给镜像使用者看的
 * ENTRYPOINT  镜像中应用的启动命令，容器运行时调用
+
+### Dockerfile 是做什么的？
+* Dockerfile 就是利用固定的指令来描述镜像的结构和构建过程，这样 Docker 才可以依次来构建镜像
+```dockerfile
+# 基础镜像
+FROM openjdk:11.0-jre-buster
+# 设定时区
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# 拷贝jar包
+COPY docker-demo.jar /app.jar
+# 入口
+ENTRYPOINT ["java", "-jar", "/app.jar"]
+```
+
+### 构建镜像的命令是什么？
+* docker build -t 镜像名 Dockerfile目录
