@@ -168,3 +168,4 @@ networks:
   hm-net:
     name: hmall
 ```
+docker run -d --name mysql -p 3307:3306 -e TZ=Asia/Shanghai -e MYSQL_ROOT_PASSWORD=123 -v /Users/dengwenjie/dockermountdata/data:/var/lib/mysql -v /Users/dengwenjie/dockermountdata/init:/docker-entrypoint-initdb.d -v /Users/dengwenjie/dockermountdata/conf:/ect/mysql/conf.d mysql
