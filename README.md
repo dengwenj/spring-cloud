@@ -21,3 +21,22 @@
 * 纵向拆分：按照业务模块来拆分
 * 横向拆分：抽取公共服务，提供复用性
 * 工程结构有两种：1、独立Project，2、Maven聚合
+
+## 远程调用
+* Spring 给我们提供了一个 RestTemplate 工具，可以方便的实现Http请求的发送。
+* 1、注入 RestTemplate 到 Spring 容器
+* 2、发起远程调用
+```java
+ResponseEntity<List<ItemDTO>> response = restTemplate.exchange(
+    "http://localhost:8081/items?ids={ids}",
+    HttpMethod.GET,
+    null,
+    new ParameterizedTypeReference<List<ItemDTO>>() {
+    },
+    Map.of("ids", itemIds.stream().map((item) -> item + "").collect(Collectors.joining(",")))
+);
+```
+
+## 拆分后碰到的第一个问题是什么，如何解决？
+* 拆分后，某些数据在不同的服务，无法直接调用本地方法查询数据
+* 利用 RestTemplate 发送 http 请求，实现远程调用
