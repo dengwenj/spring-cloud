@@ -131,3 +131,22 @@ public interface ItemClient {
 ```java
 List<ItemDTO> items = itemClient.queryItemByIds(itemIds);
 ```
+
+## 连接池
+* OpenFeign 对 Http 请求做了优雅的伪装，不过其底层发起 http 请求，依赖于其他的框架，这些框架可以自己选择，包括以下三种：
+* HttpURLConnection：默认实现，不支持连接池
+* Apache HttpClient：支持连接池
+* OKHttp：支持连接池
+* 1、引入依赖
+```xml
+<dependency>
+    <groupId>io.github.openfeign</groupId>
+    <artifactId>feign-okhttp</artifactId>
+</dependency>
+```
+* 2、开启连接池功能
+```yaml
+feign:
+  okhttp:
+    enabled: true # 开启okhttp连接池支持
+```
