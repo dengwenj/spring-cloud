@@ -92,3 +92,42 @@ ServiceInstance instance = instances.get(new Random().nextInt(instances.size()))
 // 获取实例的 ip 和 端口
 URI uri = instance.getUri();
 ```
+
+## OpenFeign
+* OpenFeign 是一个声明式的 http 客户端，是 SpringCloud 在 Eureka 公司开源的 Feign 基础上改造而来
+* 其作用就是基于 SpringMVC 的常见注解，帮我们优雅的实现 http 请求的发送
+* OpenFeign 已经被 SpringCloud 自动装配，实现起来非常简单
+* 1、引入依赖，包括 OpenFeign 和负载均衡组件 SpringCloudLoadBalancer
+* 2、通过@EnableFeignClients注解，启用 OpenFeign 功能
+* 3、编写 FeignClient
+* 4、使用 FeignClient，实现远程调用
+```xml
+<!--       OpenFeign -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+<!--        负载均衡-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+```
+```java
+@EnableFeignClients
+public class CartApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(CartApplication.class, args);
+    }
+}
+```
+```java
+@FeignClient(value = "item-service")
+public interface ItemClient {
+    @GetMapping("/items")
+    List<ItemDTO> queryItemByIds(@RequestParam("ids") Collection<Long> ids);
+}
+```
+```java
+List<ItemDTO> items = itemClient.queryItemByIds(itemIds);
+```

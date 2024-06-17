@@ -3,6 +3,7 @@ package com.hmall.cart.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hmall.cart.client.ItemClient;
 import com.hmall.cart.domain.dto.CartFormDTO;
 import com.hmall.cart.domain.dto.ItemDTO;
 import com.hmall.cart.domain.po.Cart;
@@ -39,9 +40,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements ICartService {
 
-    private final RestTemplate restTemplate;
+    //private final RestTemplate restTemplate;
+    //
+    //private final DiscoveryClient discoveryClient;
 
-    private final DiscoveryClient discoveryClient;
+    private final ItemClient itemClient;
 
     @Override
     public void addItem2Cart(CartFormDTO cartFormDTO) {
@@ -88,27 +91,29 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements IC
     private void handleCartItems(List<CartVO> vos) {
         // 1.获取商品id
         Set<Long> itemIds = vos.stream().map(CartVO::getItemId).collect(Collectors.toSet());
-        // 根据服务名称获取服务的实例列表
-        List<ServiceInstance> instances = discoveryClient.getInstances("item-service");
-        // 手写负载均衡，从实例列表中挑选一个实例
-        ServiceInstance instance = instances.get(new Random().nextInt(instances.size()));
-        // 获取实例的 ip 和 端口
-        URI uri = instance.getUri();
-        // 2.查询商品
-        // 调用商品微服务的 controller 中 根据id批量查询商品方法
-        ResponseEntity<List<ItemDTO>> response = restTemplate.exchange(
-            uri + "/items?ids={ids}",
-            HttpMethod.GET,
-            null,
-            new ParameterizedTypeReference<List<ItemDTO>>() {
-            },
-            Map.of("ids", itemIds.stream().map((item) -> item + "").collect(Collectors.joining(",")))
-        );
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            return;
-        }
+        //// 根据服务名称获取服务的实例列表
+        //List<ServiceInstance> instances = discoveryClient.getInstances("item-service");
+        //// 手写负载均衡，从实例列表中挑选一个实例
+        //ServiceInstance instance = instances.get(new Random().nextInt(instances.size()));
+        //// 获取实例的 ip 和 端口
+        //URI uri = instance.getUri();
+        //// 2.查询商品
+        //// 调用商品微服务的 controller 中 根据id批量查询商品方法
+        //ResponseEntity<List<ItemDTO>> response = restTemplate.exchange(
+        //    uri + "/items?ids={ids}",
+        //    HttpMethod.GET,
+        //    null,
+        //    new ParameterizedTypeReference<List<ItemDTO>>() {
+        //    },
+        //    Map.of("ids", itemIds.stream().map((item) -> item + "").collect(Collectors.joining(",")))
+        //);
+        //if (!response.getStatusCode().is2xxSuccessful()) {
+        //    return;
+        //}
 
-        List<ItemDTO> items = response.getBody();
+        //List<ItemDTO> items = response.getBody();
+
+        List<ItemDTO> items = itemClient.queryItemByIds(itemIds);
 
         if (CollUtils.isEmpty(items)) {
             return;
