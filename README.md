@@ -54,3 +54,27 @@ ResponseEntity<List<ItemDTO>> response = restTemplate.exchange(
 
 ## 当提供者有多个实例时，消费者该选择哪一个？
 * 消费者可以通过负载均衡算法，从多个实例中选择一个
+
+## nacos 注册中心
+
+## 服务注册
+* 服务注册步骤如下：
+* 1、引入 nacos discovery 依赖
+```xml
+<!--        nacos 服务注册发现-->
+<dependencies>
+    <dependency>
+        <groupId>com.alibaba.cloud</groupId>
+        <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+    </dependency>
+</dependencies>
+```
+* 2、配置 nacos 地址
+```yaml
+spring:
+  application:
+    name: item-service # 微服务名称
+  cloud:
+    nacos:
+      server-addr: localhost:8848
+```

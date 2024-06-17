@@ -170,3 +170,24 @@ com.hmall.common.exception.UnauthorizedException: 未登录
 13:01:32:005  WARN 38708 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=7m19s341ms).
 13:17:09:126  WARN 38708 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=3m36s996ms).
 15:02:03:204  WARN 38708 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m53s275ms).
+15:45:40:491 DEBUG 38708 --- [http-nio-8083-exec-6] c.h.user.mapper.UserMapper.selectList    : ==>  Preparing: SELECT id,username,password,phone,create_time,update_time,status,balance FROM user WHERE (username = ?)
+15:45:40:492 DEBUG 38708 --- [http-nio-8083-exec-6] c.h.user.mapper.UserMapper.selectList    : ==> Parameters: jack(String)
+15:45:40:498 DEBUG 38708 --- [http-nio-8083-exec-6] c.h.user.mapper.UserMapper.selectList    : <==      Total: 1
+16:00:58:528 DEBUG 38708 --- [http-nio-8083-exec-2] c.h.user.mapper.UserMapper.selectList    : ==>  Preparing: SELECT id,username,password,phone,create_time,update_time,status,balance FROM user WHERE (username = ?)
+16:00:58:529 DEBUG 38708 --- [http-nio-8083-exec-2] c.h.user.mapper.UserMapper.selectList    : ==> Parameters: jack(String)
+16:00:58:532 DEBUG 38708 --- [http-nio-8083-exec-2] c.h.user.mapper.UserMapper.selectList    : <==      Total: 1
+16:00:59:327 DEBUG 38708 --- [http-nio-8083-exec-4] c.h.user.mapper.UserMapper.selectList    : ==>  Preparing: SELECT id,username,password,phone,create_time,update_time,status,balance FROM user WHERE (username = ?)
+16:00:59:328 DEBUG 38708 --- [http-nio-8083-exec-4] c.h.user.mapper.UserMapper.selectList    : ==> Parameters: jack(String)
+16:00:59:331 DEBUG 38708 --- [http-nio-8083-exec-4] c.h.user.mapper.UserMapper.selectList    : <==      Total: 1
+16:00:59:924 DEBUG 38708 --- [http-nio-8083-exec-3] c.h.user.mapper.UserMapper.selectList    : ==>  Preparing: SELECT id,username,password,phone,create_time,update_time,status,balance FROM user WHERE (username = ?)
+16:00:59:925 DEBUG 38708 --- [http-nio-8083-exec-3] c.h.user.mapper.UserMapper.selectList    : ==> Parameters: jack(String)
+16:00:59:930 DEBUG 38708 --- [http-nio-8083-exec-3] c.h.user.mapper.UserMapper.selectList    : <==      Total: 1
+16:01:00:591 DEBUG 38708 --- [http-nio-8083-exec-5] c.h.user.mapper.UserMapper.selectList    : ==>  Preparing: SELECT id,username,password,phone,create_time,update_time,status,balance FROM user WHERE (username = ?)
+16:01:00:592 DEBUG 38708 --- [http-nio-8083-exec-5] c.h.user.mapper.UserMapper.selectList    : ==> Parameters: jack(String)
+16:01:00:600 DEBUG 38708 --- [http-nio-8083-exec-5] c.h.user.mapper.UserMapper.selectList    : <==      Total: 1
+16:01:01:600 DEBUG 38708 --- [http-nio-8083-exec-10] c.h.user.mapper.UserMapper.selectList    : ==>  Preparing: SELECT id,username,password,phone,create_time,update_time,status,balance FROM user WHERE (username = ?)
+16:01:01:603 DEBUG 38708 --- [http-nio-8083-exec-10] c.h.user.mapper.UserMapper.selectList    : ==> Parameters: jack(String)
+16:01:01:609 DEBUG 38708 --- [http-nio-8083-exec-10] c.h.user.mapper.UserMapper.selectList    : <==      Total: 1
+17:00:48:444  WARN 38708 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m14s378ms).
+17:39:18:834  INFO 38708 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+17:39:18:875  INFO 38708 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
