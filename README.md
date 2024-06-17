@@ -78,3 +78,17 @@ spring:
     nacos:
       server-addr: localhost:8848
 ```
+
+## 服务发现
+* 消费者需要连接 nacos 以拉取和订阅服务，因此服务发现的前两步与服务注册时一样，后面再加上服务调用即可：
+* 1、引入 nacos discovery 依赖
+* 2、配置 nacos 地址
+* 3、服务发现
+```java
+// 根据服务名称获取服务的实例列表
+List<ServiceInstance> instances = discoveryClient.getInstances("item-service");
+// 手写负载均衡，从实例列表中挑选一个实例
+ServiceInstance instance = instances.get(new Random().nextInt(instances.size()));
+// 获取实例的 ip 和 端口
+URI uri = instance.getUri();
+```

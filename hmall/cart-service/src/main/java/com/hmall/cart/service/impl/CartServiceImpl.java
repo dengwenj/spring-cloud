@@ -14,16 +14,16 @@ import com.hmall.common.utils.BeanUtils;
 import com.hmall.common.utils.CollUtils;
 import com.hmall.common.utils.UserContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.net.URI;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -40,6 +40,8 @@ import java.util.stream.Collectors;
 public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements ICartService {
 
     private final RestTemplate restTemplate;
+
+    private final DiscoveryClient discoveryClient;
 
     @Override
     public void addItem2Cart(CartFormDTO cartFormDTO) {
@@ -86,10 +88,16 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements IC
     private void handleCartItems(List<CartVO> vos) {
         // 1.获取商品id
         Set<Long> itemIds = vos.stream().map(CartVO::getItemId).collect(Collectors.toSet());
+        // 根据服务名称获取服务的实例列表
+        List<ServiceInstance> instances = discoveryClient.getInstances("item-service");
+        // 手写负载均衡，从实例列表中挑选一个实例
+        ServiceInstance instance = instances.get(new Random().nextInt(instances.size()));
+        // 获取实例的 ip 和 端口
+        URI uri = instance.getUri();
         // 2.查询商品
         // 调用商品微服务的 controller 中 根据id批量查询商品方法
         ResponseEntity<List<ItemDTO>> response = restTemplate.exchange(
-            "http://localhost:8081/items?ids={ids}",
+            uri + "/items?ids={ids}",
             HttpMethod.GET,
             null,
             new ParameterizedTypeReference<List<ItemDTO>>() {
