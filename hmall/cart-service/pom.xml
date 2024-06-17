@@ -63,6 +63,12 @@
             <artifactId>feign-okhttp</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.hmall.api</groupId>
+            <artifactId>hm-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
     <build>
         <finalName>${project.artifactId}</finalName>

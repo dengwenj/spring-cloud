@@ -150,3 +150,8 @@ feign:
   okhttp:
     enabled: true # 开启okhttp连接池支持
 ```
+
+## 最佳实践
+* 当定义的 FeignClient 不在 SpringBootApplication 的扫描包范围时，这些 FeignClient 无法使用，有两种方式解决
+* 方式一：指定 FeignClient 所在包，@EnableFeignClients(basePackages = "com.hmall.api.client")
+* 方式二：指定 FeignClient 字节码，@EnableFeignClients(clients = {UserClient.class})
