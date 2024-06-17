@@ -1,0 +1,28 @@
+11:01:33:599  INFO 40265 --- [main] com.hmall.trade.TradeApplication         : Starting TradeApplication using Java 17.0.10 on MacBook-Pro.local with PID 40265 (/Users/dengwenjie/Java/spring-cloud/hmall/trade-service/target/classes started by dengwenjie in /Users/dengwenjie/Java/spring-cloud)
+11:01:33:601 DEBUG 40265 --- [main] com.hmall.trade.TradeApplication         : Running with Spring Boot v2.7.12, Spring v5.3.27
+11:01:33:601  INFO 40265 --- [main] com.hmall.trade.TradeApplication         : The following 1 profile is active: "dev"
+11:01:34:139  INFO 40265 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8084 (http)
+11:01:34:144  INFO 40265 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+11:01:34:144  INFO 40265 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.75]
+11:01:34:186  INFO 40265 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+11:01:34:186  INFO 40265 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 563 ms
+11:01:34:222  WARN 40265 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'orderController' defined in file [/Users/dengwenjie/Java/spring-cloud/hmall/trade-service/target/classes/com/hmall/trade/controller/OrderController.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'orderServiceImpl' defined in file [/Users/dengwenjie/Java/spring-cloud/hmall/trade-service/target/classes/com/hmall/trade/service/impl/OrderServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'com.hmall.trade.service.IItemService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+11:01:34:223  INFO 40265 --- [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+11:01:34:232  INFO 40265 --- [main] ConditionEvaluationReportLoggingListener : 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+11:01:34:241 ERROR 40265 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.hmall.trade.service.impl.OrderServiceImpl required a bean of type 'com.hmall.trade.service.IItemService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.hmall.trade.service.IItemService' in your configuration.
+
