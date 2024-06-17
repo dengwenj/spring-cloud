@@ -155,3 +155,16 @@ feign:
 * 当定义的 FeignClient 不在 SpringBootApplication 的扫描包范围时，这些 FeignClient 无法使用，有两种方式解决
 * 方式一：指定 FeignClient 所在包，@EnableFeignClients(basePackages = "com.hmall.api.client")
 * 方式二：指定 FeignClient 字节码，@EnableFeignClients(clients = {UserClient.class})
+
+## 日志
+* 要自定义日志级别需要声明一个类型为 Logger.Level 的 Bean，在其中定义日志级别
+```java
+public class DefaultFeignConfig {
+    @Bean 
+    public Logger.Level feignLogLevel() {
+        return Logger.Level.FULL;
+    }
+}
+```
+* 但此时这个 Bean 并未生效，想要配置某个 FeignClient 的日志，可以在 @FeignClient 注解中声明
+* 如果想要全局配置，让所有 FeignClient 都按照这个日志配置，则需要再 @EnableFeignClients 注解中声明
