@@ -290,3 +290,17 @@ public class MyGlobalFilter implements GlobalFilter, Ordered {
     }
 }
 ```
+
+## OpenFeign 传递用户（微服务之间的数据传递）
+* OpenFeign 中提供了一个拦截器接口，所有由 OpenFeign 发起的请求都会先调用拦截器处理请求
+```java
+public class UserInfoInterceptor implements RequestInterceptor {
+    @Override
+    public void apply(RequestTemplate requestTemplate) {
+        Long user = UserContext.getUser();
+        if (user != null) {
+            requestTemplate.header("userInfo", user.toString());
+        }
+    }
+}
+```
