@@ -206,3 +206,31 @@ spring:
           predicates:
             - Path=/addresses/**,/users/**
 ```
+
+## 路由属性
+* 网关路由对应的 java 类型是 RouteDefinition，其中常见的属性有：
+* 1、id：路由唯一标识
+* 2、uri：路由目标地址
+* 3、predicates：路由断言，判断请求是否符合当前路由
+* 4、filters：路由过滤器，对请求或响应做特殊处理
+
+## 路由断言
+* Spring 提供了 12 种基本的 RoutePredicateFactory 实现：
+* After：是某个时间点后的请求
+* Before：是某个时间点之前的请求
+* Between：是某两个时间点之间的请求
+* Cookie：请求必须包含某些 cookie
+* Header：请求必须包含某些 header
+* Host：请求必须是访问某个 host（域名）
+* Method：请求方式必须是指定方式
+* Path：请求路径必须符合指定规则
+* Query：请求参数必须包含指定参数
+* RemoteAddr：请求者的 ip 必须是指定范围
+* Weight：权重处理
+* XForwarded Remote Addr：基于请求的来源 ip 做判断
+
+## 路由过滤器
+* 网关中提供了33种路由过滤器，每种过滤器都有独特的作用
+* AddRequestHeader：给当前请求添加一个请求头
+* AddResponseHeader：给响应结果中添加一个响应头
+* ...
