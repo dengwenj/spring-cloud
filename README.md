@@ -55,7 +55,7 @@ ResponseEntity<List<ItemDTO>> response = restTemplate.exchange(
 ## 当提供者有多个实例时，消费者该选择哪一个？
 * 消费者可以通过负载均衡算法，从多个实例中选择一个
 
-## nacos 注册中心
+## nacos 注册中心(是个服务，也需要下载安装运行)
 
 ## 服务注册
 * 服务注册步骤如下：
@@ -226,7 +226,7 @@ spring:
 * Path：请求路径必须符合指定规则
 * Query：请求参数必须包含指定参数
 * RemoteAddr：请求者的 ip 必须是指定范围
-* Weight：权重处理
+* Weight：权重处理 
 * XForwarded Remote Addr：基于请求的来源 ip 做判断
 
 ## 路由过滤器
@@ -234,3 +234,33 @@ spring:
 * AddRequestHeader：给当前请求添加一个请求头
 * AddResponseHeader：给响应结果中添加一个响应头
 * ...
+
+## 网关登录校验
+* 1、如何在网关转发之前做登录校验？
+* 2、网关如何将用户信息传递给微服务？
+* 3、如何在微服务之间传递用户信息？
+
+## 自定义过滤器
+* 网关过滤器有两种，分别是：
+* GatewayFilter：路由过滤器，作用于任意指定的路由，默认不生效，要配置到路由后生效
+* GlobalFilter：全局过滤器，作用范围是所有路由，声明后自动生效
+* 第一个参数 exchange：请求上下文，包含整个过滤器链内共享数据，例如 request，response
+* 第二个参数 chain：过滤器链，当前过滤器执行完后，要调用过滤器链中的下一个过滤器
+```java
+@Component
+public class MyGlobalFilter implements GlobalFilter, Ordered {
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        ServerHttpRequest request = exchange.getRequest();
+        ServerHttpResponse response = exchange.getResponse();
+        System.out.println(request.getHeaders());
+        return chain.filter(exchange);
+    }
+
+    @Override
+    public int getOrder() {
+        // 数字越小，优先级越高
+        return 0;
+    }
+}
+```
