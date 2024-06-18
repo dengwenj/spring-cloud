@@ -76,7 +76,9 @@ spring:
     name: item-service # 微服务名称
   cloud:
     nacos:
-      server-addr: localhost:8848
+      discovery:
+        server-addr: localhost:8848
+        ip: 127.0.0.1
 ```
 
 ## 服务发现
@@ -175,8 +177,32 @@ public class DefaultFeignConfig {
 * 这就是需要去做服务治理，就引出了 nacos 注册中心，核心功能就是帮助我们去做服务注册发现，去管理所有的微服务，并监控微服务的状态等等，这样就解决了上述的问题，
 * 只不过代码就会变得复杂，要自己获取实例列表手写负载均衡获取uri，这时就引出了 OpenFeign，它可以简化这种跨服务调用的代码，只需要定义一个接口就可以发起调用，然后就对 OpenFeign 做了进一步的优化和改造。
 
-## 网关（也是个微服务）
+## 网关（也是个微服务，入口 ）
 * 网关就是网络的关口，负责请求的路由、转发、身份校验
 * SpringCloud 中网关的实现包括两种：
 * 1、SpringCloudGateway：基于 webflux 响应式变成，无需调优即可获得优异性能
 * 2、Netfilx Zuul：基于 Servlet 的阻塞式编程，需要调优才能获得与 SpringCloudGateway 类似的性能
+
+## 网关配置路由规则
+```yaml
+server:
+  port: 8080
+spring:
+  application:
+    name: gateway # 服务名
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        ip: 127.0.0.1
+    gateway:
+      routes:
+        - id: item-service # 路由规则id，自定义，唯一
+          uri: lb://item-service # 路由目标微服务，lb代表负载均衡
+          predicates: # 路由断言，判断请求是否符合规则，符合则路由到目标
+            - Path=/items/** # 以请求路径做判断，以 /items 开头则符合
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/addresses/**,/users/**
+```
