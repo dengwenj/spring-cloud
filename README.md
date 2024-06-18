@@ -246,6 +246,8 @@ spring:
 * GlobalFilter：全局过滤器，作用范围是所有路由，声明后自动生效
 * 第一个参数 exchange：请求上下文，包含整个过滤器链内共享数据，例如 request，response
 * 第二个参数 chain：过滤器链，当前过滤器执行完后，要调用过滤器链中的下一个过滤器
+
+## 自定义过滤器GlobalFilter
 ```java
 @Component
 public class MyGlobalFilter implements GlobalFilter, Ordered {
