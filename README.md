@@ -182,7 +182,31 @@ public class DefaultFeignConfig {
 * SpringCloud 中网关的实现包括两种：
 * 1、SpringCloudGateway：基于 webflux 响应式变成，无需调优即可获得优异性能
 * 2、Netfilx Zuul：基于 Servlet 的阻塞式编程，需要调优才能获得与 SpringCloudGateway 类似的性能
-
+```xml
+<dependencies>
+    <!--common-->
+    <dependency>
+        <groupId>com.heima</groupId>
+        <artifactId>hm-common</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+    <!--网关-->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-gateway</artifactId>
+    </dependency>
+    <!--nacos discovery-->
+    <dependency>
+        <groupId>com.alibaba.cloud</groupId>
+        <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+    </dependency>
+    <!--负载均衡-->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+    </dependency>
+</dependencies>
+```
 ## 网关配置路由规则
 ```yaml
 server:

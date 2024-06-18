@@ -55,8 +55,13 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         }
 
         // 传递 userId
+        Long finalUserId = userId;
+        // 把 userInfo 添加到请求头
+        ServerWebExchange swe = exchange.mutate()
+            .request((builder) -> builder.header("userInfo", finalUserId.toString()))
+            .build();
 
-        return chain.filter(exchange);
+        return chain.filter(swe);
     }
 
     @Override
