@@ -289,7 +289,7 @@ public class MyGlobalFilter implements GlobalFilter, Ordered {
         return 0;
     }
 }
-```
+``` 
 
 ## OpenFeign 传递用户（微服务之间的数据传递）
 * OpenFeign 中提供了一个拦截器接口，所有由 OpenFeign 发起的请求都会先调用拦截器处理请求
@@ -304,3 +304,21 @@ public class UserInfoInterceptor implements RequestInterceptor {
     }
 }
 ```
+
+## 配置管理
+* 微服务重复配置过多，维护成本高
+* 业务配置经常变动，每次修改都要重启服务
+* 网关路由配置写死，如果变更要重启网关
+
+## 共享配置
+* 添加一些共享配置到 Nacos 中，包括 jdbc，MybatisPlus，日志，swagger等等
+
+## 配置热更新
+* 当修改配置文件中的配置时，微服务无需重启即可使配置生效
+* 1、nacos 中要有一个与微服务名有关的配置文件
+* 2、微服务中要以特定方式读取需要热更新的配置属性
+
+## 动态路由
+* 要实现动态路由首先要将路由配置保存到 Nacos，当 Nacos 中的路由配置变更时，推送最新配置到网关，实时更新网关中的路由信息
+* 1、监听 Nacos 配置变更的消息
+* 2、当配置变更时，将最新的路由信息更新到网关路由表
